@@ -81,6 +81,7 @@ def read_parquet(
     )
     storage_config = StorageConfig(multithreaded_io, io_config)
 
+    # 执行计划
     builder = get_tabular_files_scan(
         path=path,
         infer_schema=infer_schema,

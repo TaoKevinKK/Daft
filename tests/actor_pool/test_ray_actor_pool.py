@@ -23,8 +23,9 @@ class MyUDF:
 
 def test_ray_actor_pool():
     projection = ExpressionsProjection([MyUDF(daft.col("x"))])
+    execution_config = PyDaftExecutionConfig.from_env()
     pool = RayRoundRobinActorPool(
-        "my-pool", 1, ResourceRequest(num_cpus=1), projection, execution_config=PyDaftExecutionConfig.from_env()
+        "my-pool", 1, ResourceRequest(num_cpus=1), projection, execution_config=execution_config
     )
     initial_partition = ray.put(MicroPartition.from_pydict({"x": [1, 1, 1]}))
     ppm = PartialPartitionMetadata(num_rows=None, size_bytes=None)

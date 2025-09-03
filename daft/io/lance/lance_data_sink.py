@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import pathlib
 from itertools import chain
 from typing import TYPE_CHECKING, Any, Literal
@@ -20,6 +21,7 @@ if TYPE_CHECKING:
 
     from daft.daft import IOConfig
 
+logger = logging.getLogger(__name__)
 
 class LanceDataSink(DataSink[list[lance.FragmentMetadata]]):
     """WriteSink for writing data to a Lance dataset."""
@@ -54,7 +56,7 @@ class LanceDataSink(DataSink[list[lance.FragmentMetadata]]):
         self._storage_options = io_config_to_storage_options(self._io_config, self._table_uri)
 
         self._pyarrow_schema = schema.to_pyarrow_schema()
-
+        logger.info(f"LanceDataSink storage_options {self._storage_options} schema {self._pyarrow_schema}")
         try:
             table = lance.dataset(self._table_uri, storage_options=self._storage_options)
 

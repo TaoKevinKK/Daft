@@ -1,4 +1,5 @@
 //! Wrapper around the python RayRunner class
+use std::collections::HashMap;
 use std::sync::Arc;
 
 #[cfg(feature = "python")]
@@ -27,7 +28,7 @@ impl RayRunner {
     pub fn try_new(
         address: Option<String>,
         max_task_backlog: Option<usize>,
-        force_client_mode: Option<bool>,
+        force_client_mode: Option<bool>
     ) -> DaftResult<Self> {
         Python::with_gil(|py| {
             let ray_runner_module = py.import(intern!(py, "daft.runners.ray_runner"))?;
@@ -159,7 +160,7 @@ pub enum RunnerConfig {
     Ray {
         address: Option<String>,
         max_task_backlog: Option<usize>,
-        force_client_mode: Option<bool>,
+        force_client_mode: Option<bool>
     },
 }
 
@@ -171,11 +172,11 @@ impl RunnerConfig {
             Self::Ray {
                 address,
                 max_task_backlog,
-                force_client_mode,
+                force_client_mode
             } => Ok(Runner::Ray(RayRunner::try_new(
                 address,
                 max_task_backlog,
-                force_client_mode,
+                force_client_mode
             )?)),
         }
     }

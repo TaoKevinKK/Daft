@@ -31,7 +31,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-
+# put ray object store
 class MicroPartition:
     _micropartition: _PyMicroPartition
 

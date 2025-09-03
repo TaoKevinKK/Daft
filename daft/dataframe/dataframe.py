@@ -3925,6 +3925,7 @@ class DataFrame:
 
     def _materialize_results(self) -> None:
         """Materializes the results of for this DataFrame and hold a pointer to the results."""
+        # action算子，触发执行计划的计算
         context = get_context()
         if self._result is None:
             self._result_cache = context.get_or_create_runner().run(self._builder)

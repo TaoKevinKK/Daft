@@ -283,6 +283,7 @@ class FlotillaRunner:
 
     def __init__(self) -> None:
         head_node_id = get_head_node_id()
+        # 调度到head节点，管理和执行执行计划
         self.runner = RemoteFlotillaRunner.options(  # type: ignore
             name=FLOTILLA_RUNNER_NAME,
             namespace=FLOTILLA_RUNNER_NAMESPACE,

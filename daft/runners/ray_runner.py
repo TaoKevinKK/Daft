@@ -468,7 +468,7 @@ class RayRunnerIO(runner_io.RunnerIO):
             schemas[0],
         )
 
-
+# 设置ray task的配置
 def _get_ray_task_options(resource_request: ResourceRequest) -> dict[str, Any]:
     options = {}
     # FYI: Ray's default resource behaviour is documented here:
@@ -1186,6 +1186,7 @@ class RayRoundRobinActorPool:
         ray_options = _get_ray_task_options(self._resource_request_per_actor)
 
         self._actors = [
+            # _projection 是一个op，比如udf，传递给Ray actor
             DaftRayActor.options(name=f"rank={rank}-{self._id}", **ray_options).remote(  # type: ignore
                 self._execution_config, self._projection
             )
@@ -1206,6 +1207,7 @@ class RayRoundRobinActorPool:
         assert self._actors is not None, "Must have active Ray actors during submission"
 
         # Determine which actor to schedule on in a round-robin fashion
+        # 每次call submit 就是执行一次task，通过round-robin 选择一个actor执行
         idx = self._task_idx % self._num_actors
         self._task_idx += 1
         actor = self._actors[idx]

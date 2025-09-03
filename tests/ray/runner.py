@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from pathlib import Path
+
 import pytest
 
 import daft
@@ -67,7 +69,10 @@ def test_active_plan_with_show_and_write_parquet(tmpdir):
         scan_tasks_min_size_bytes=0,
         scan_tasks_max_size_bytes=0,
     ):
-        df = daft.read_parquet("tests/assets/parquet-data/mvp.parquet")
+        path = Path(__file__).parent.parent / "assets/parquet-data/mvp.parquet"
+        assert path.exists(), f"Test data file not found: {path}"
+
+        df = daft.read_parquet(str(path))
         df = df.into_partitions(8)
         df = df.join(df, on="a")
         df.show()
